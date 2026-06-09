@@ -1,3 +1,19 @@
+@font-face {
+    font-family: IRANSans;
+    font-style: normal;
+    font-weight: normal;
+    src: url("fonts/IRANSans/IRANSansWeb.eot");
+    src: url("fonts/IRANSans/IRANSansWeb.eot?#iefix") format("embedded-opentype"), url("fonts/IRANSans/IRANSansWeb.woff2") format("woff2"), url("fonts/IRANSans/IRANSansWeb.woff") format("woff"), url("fonts/IRANSans/IRANSansWeb.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: IRANSans;
+    font-style: normal;
+    font-weight: bold;
+    src: url("fonts/IRANSans/IRANSansWeb_Bold.eot");
+    src: url("fonts/IRANSans/IRANSansWeb_Bold.eot?#iefix") format("embedded-opentype"), url("fonts/IRANSans/IRANSansWeb_Bold.woff2") format("woff2"), url("fonts/IRANSans/IRANSansWeb_Bold.woff") format("woff"), url("fonts/IRANSans/IRANSansWeb_Bold.ttf") format("truetype");
+}
+
 /* ===== RESET & BASE ===== */
 *, *::before, *::after {
     margin: 0;
@@ -10,7 +26,7 @@ html {
 }
 
 body {
-    font-family: 'Vazirmatn', sans-serif;
+    font-family: 'IRANSans', sans-serif;
     direction: rtl;
     background: #1a1209;
     color: #3d2e10;
@@ -299,7 +315,7 @@ ul {
     gap: 10px;
     background: linear-gradient(135deg, var(--burgundy), var(--burgundy-light));
     color: var(--cream);
-    font-family: 'Vazirmatn', sans-serif;
+     
     font-size: 14px;
     font-weight: 700;
     padding: 14px 28px;
@@ -433,7 +449,7 @@ ul {
     gap: 10px;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
     color: var(--brown-dark);
-    font-family: 'Vazirmatn', sans-serif;
+     
     font-size: 18px;
     font-weight: 800;
     padding: 20px 48px;
@@ -456,7 +472,7 @@ ul {
     background: transparent;
     border: 2px solid rgba(253,246,227,0.25);
     color: var(--cream);
-    font-family: 'Vazirmatn', sans-serif;
+     
     font-size: 16px;
     font-weight: 600;
     padding: 18px 40px;
@@ -979,7 +995,7 @@ ul {
     gap: 12px;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
     color: var(--brown-dark);
-    font-family: 'Vazirmatn', sans-serif;
+     
     font-size: 20px;
     font-weight: 800;
     padding: 22px 56px;
