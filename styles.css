@@ -346,7 +346,7 @@ ul {
     background: linear-gradient(160deg, #1a1209 0%, #3d1a1a 35%, #2a1f0a 65%, #1a1209 100%);
 }
 
-.hero-bg-img {
+/*.hero-bg-img {
     position: absolute;
     inset: 0;
     background: url('images/hero-bg.jpg') center/cover no-repeat;
@@ -358,7 +358,7 @@ ul {
     inset: 0;
     background: url('images/texture-pattern.jpg') center/400px repeat;
     opacity: 0.04;
-}
+}*/
 
 .hero-vignette {
     position: absolute;
@@ -961,13 +961,13 @@ ul {
     overflow: hidden;
 }
 
-    .cta-box::before {
+    /*.cta-box::before {
         content: '';
         position: absolute;
         inset: 0;
         background: url('images/texture-pattern.jpg') center/400px repeat;
         opacity: 0.04;
-    }
+    }*/
 
     .cta-box h3 {
         font-size: clamp(24px, 4vw, 34px);
