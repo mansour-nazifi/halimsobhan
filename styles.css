@@ -253,7 +253,7 @@ ul {
 }
 
 .nav-logo {
-   /* width: 52px;*/
+    /* width: 52px;*/
     height: 52px;
     /*border-radius: 50%;
     border: 2px solid rgba(212,165,55,0.5);
@@ -315,7 +315,6 @@ ul {
     gap: 10px;
     background: linear-gradient(135deg, var(--burgundy), var(--burgundy-light));
     color: var(--cream);
-     
     font-size: 14px;
     font-weight: 700;
     padding: 14px 28px;
@@ -449,7 +448,6 @@ ul {
     gap: 10px;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
     color: var(--brown-dark);
-     
     font-size: 18px;
     font-weight: 800;
     padding: 20px 48px;
@@ -472,7 +470,6 @@ ul {
     background: transparent;
     border: 2px solid rgba(253,246,227,0.25);
     color: var(--cream);
-     
     font-size: 16px;
     font-weight: 600;
     padding: 18px 40px;
@@ -995,7 +992,6 @@ ul {
     gap: 12px;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
     color: var(--brown-dark);
-     
     font-size: 20px;
     font-weight: 800;
     padding: 22px 56px;
@@ -1215,6 +1211,7 @@ ul {
 
     .mobile-menu-btn {
         display: flex;
+        display: none;
     }
 
     .about-grid {
