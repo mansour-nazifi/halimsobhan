@@ -108,3 +108,22 @@ document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
     });
   });
 })();
+
+// ===== FAQ Accordion =====
+(function() {
+  var faqQuestions = document.querySelectorAll('.faq-question');
+
+  faqQuestions.forEach(function(button) {
+    button.addEventListener('click', function() {
+      // Close all other items
+      faqQuestions.forEach(function(otherButton) {
+        if (otherButton !== button) {
+          otherButton.classList.remove('active');
+        }
+      });
+
+      // Toggle current item
+      button.classList.toggle('active');
+    });
+  });
+})();
