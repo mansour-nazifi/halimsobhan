@@ -952,6 +952,99 @@ ul {
     background: linear-gradient(135deg, rgba(225,48,108,0.15), rgba(131,58,180,0.05));
 }
 
+/* Clickable Card Indicator */
+.contact-card-clickable {
+    cursor: pointer;
+    position: relative;
+}
+
+.contact-card-clickable::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%238b1a2b" stroke-width="2"><path d="M7 7h10v10"/><path d="M17 7L7 17"/></svg>') center/contain no-repeat;
+    opacity: 0;
+    animation: slideInArrow 0.4s ease-out 0.6s forwards;
+}
+
+@keyframes slideInArrow {
+    from {
+        opacity: 0;
+        transform: translate(8px, -8px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+.clickable-hint {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--burgundy);
+    opacity: 0;
+    animation: fadeInHint 0.5s ease-out 0.8s forwards;
+    letter-spacing: 0.5px;
+}
+
+@keyframes fadeInHint {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.contact-card-clickable:hover {
+    border-color: var(--burgundy);
+    background: rgba(139,26,43,0.08);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(139,26,43,0.1);
+}
+
+/* Map Container */
+.map-container {
+    margin-top: 60px;
+    padding: 40px 0;
+    border-top: 2px solid rgba(212,165,55,0.2);
+}
+
+.map-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 32px;
+}
+
+.map-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 3px solid var(--gold);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    background: rgba(253,246,227,0.5);
+    aspect-ratio: 16 / 9;
+}
+
+.map-wrapper iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 .cta-box {
     background: linear-gradient(135deg, var(--brown-dark), #4a3520);
     border-radius: 24px;
@@ -1235,6 +1328,14 @@ ul {
         margin-bottom: 56px;
     }
 
+    .map-wrapper {
+        max-width: 100%;
+    }
+
+    .map-title {
+        font-size: 24px;
+    }
+
     .section-pad {
         padding: 80px 20px;
     }
@@ -1294,6 +1395,35 @@ ul {
 
     .section-pad {
         padding: 64px 16px;
+    }
+
+    /* Map Responsive */
+    .map-container {
+        margin-top: 40px;
+        padding: 30px 0;
+        margin-right: -16px;
+        margin-left: -16px;
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+
+    .map-wrapper {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 8px;
+        border: 2px solid var(--gold);
+        aspect-ratio: 16 / 9;
+    }
+
+    .map-wrapper iframe {
+        width: 100%;
+        height: 100%;
+    }
+
+    .map-title {
+        font-size: 20px;
+        margin-bottom: 24px;
+        padding: 0 16px;
     }
 
     /* FAQ Responsive */
@@ -1466,6 +1596,32 @@ ul {
         font-size: 18px;
         margin-left: 12px;
     }
+
+    /* Map Responsive for very small screens */
+    .map-container {
+        margin-top: 30px;
+        padding: 20px 0;
+        margin-right: -16px;
+        margin-left: -16px;
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+
+    .map-wrapper {
+        border-radius: 8px;
+        aspect-ratio: 16 / 9;
+    }
+
+    .map-wrapper iframe {
+        width: 100%;
+        height: 100%;
+    }
+
+    .map-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
 
     .faq-answer {
         font-size: 14px;
