@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>فروشگاه تست</title>
+
+    <!-- اسکریپت رسمی SDK مینی‌اپ بله - باید قبل از هر اسکریپت دیگری باشد -->
+    <script src="https://tapi.bale.ai/miniapp.js?3"></script>
+
+    <style>
+        /* ===== ریست و متغیرهای پایه ===== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary-color: #0088cc;
+            --primary-hover: #006fa3;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        /* پشتیبانی از تم تاریک بله */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #1a1a2e;
+                --card-bg: #16213e;
+                --text-color: #e0e0e0;
+                --text-secondary: #a0a0a0;
+                --border-color: #2a2a4a;
+                --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 16px;
+            padding-bottom: 100px;
+        }
+
+        /* ===== صفحه تنظیمات ===== */
+        .setup-page {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+            .setup-page.hidden {
+                display: none;
+            }
+
+        .setup-header {
+            text-align: center;
+            padding: 30px 0 20px;
+        }
+
+            .setup-header h1 {
+                font-size: 22px;
+                color: var(--primary-color);
+                margin-bottom: 8px;
+            }
+
+            .setup-header p {
+                font-size: 14px;
+                color: var(--text-secondary);
+            }
+
+        .setup-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+            .form-group:last-of-type {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                display: block;
+                font-size: 14px;
+                font-weight: 600;
+                margin-bottom: 6px;
+                color: var(--text-color);
+            }
+
+            .form-group .hint {
+                font-size: 12px;
+                color: var(--text-secondary);
+                margin-top: 4px;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="password"] {
+                width: 100%;
+                padding: 12px 14px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                font-size: 14px;
+                font-family: monospace;
+                background: var(--bg-color);
+                color: var(--text-color);
+                direction: ltr;
+                text-align: left;
+            }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.15);
+            }
+
+            .form-group input::placeholder {
+                color: var(--text-secondary);
+                opacity: 0.7;
+            }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+            .checkbox-group input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+            }
+
+            .checkbox-group label {
+                font-size: 13px;
+                color: var(--text-secondary);
+                cursor: pointer;
+                margin: 0;
+            }
+
+        .setup-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+            .setup-btn:hover {
+                background: var(--primary-hover);
+            }
+
+            .setup-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+        .setup-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+            .setup-error.show {
+                display: block;
+            }
+
+        .token-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d7ff;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #004085;
+        }
+
+            .token-info code {
+                background: rgba(0,0,0,0.08);
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-family: monospace;
+                direction: ltr;
+                display: inline-block;
+            }
+
+        /* ===== صفحه اصلی فروشگاه ===== */
+        .shop-page {
+            display: none;
+        }
+
+            .shop-page.active {
+                display: block;
+            }
+
+        /* ===== هدر ===== */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+            .header h1 {
+                font-size: 24px;
+                font-weight: 700;
+                color: var(--primary-color);
+            }
+
+            .header .subtitle {
+                font-size: 13px;
+                color: var(--text-secondary);
+                margin-top: 4px;
+            }
+
+        .settings-btn {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--card-bg);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+            .settings-btn:hover {
+                background: var(--primary-color);
+                color: #fff;
+            }
+
+        /* ===== بخش اطلاعات کاربر ===== */
+        .user-info-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+            .user-info-card h2 {
+                font-size: 15px;
+                margin-bottom: 12px;
+                color: var(--primary-color);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .user-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+            .user-info-item .label {
+                font-size: 11px;
+                color: var(--text-secondary);
+            }
+
+            .user-info-item .value {
+                font-size: 13px;
+                font-weight: 500;
+                word-break: break-all;
+            }
+
+                .user-info-item .value.placeholder {
+                    color: var(--text-secondary);
+                    font-style: italic;
+                    font-weight: 400;
+                }
+
+        .phone-request-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+            .phone-request-btn:hover {
+                background: var(--primary-hover);
+            }
+
+            .phone-request-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+        /* ===== کارت محصول ===== */
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 14px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .product-qty {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .qty-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+            .qty-btn:first-child {
+                border-radius: 8px 0 0 8px;
+            }
+
+            .qty-btn:last-child {
+                border-radius: 0 8px 8px 0;
+            }
+
+            .qty-btn:hover {
+                background: var(--primary-color);
+                color: #fff;
+                border-color: var(--primary-color);
+            }
+
+            .qty-btn:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+
+                .qty-btn:disabled:hover {
+                    background: var(--card-bg);
+                    color: var(--text-color);
+                    border-color: var(--border-color);
+                }
+
+        .qty-input {
+            width: 48px;
+            height: 36px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-left: none;
+            border-right: none;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            -moz-appearance: textfield;
+        }
+
+            .qty-input::-webkit-outer-spin-button,
+            .qty-input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            .qty-input:focus {
+                outline: 2px solid var(--primary-color);
+                outline-offset: -2px;
+            }
+
+        /* ===== خلاصه سفارش ===== */
+        .order-summary {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+            .order-summary h2 {
+                font-size: 15px;
+                margin-bottom: 12px;
+                color: var(--primary-color);
+            }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+            .summary-row:not(:last-child) {
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .summary-row.total {
+                font-weight: 700;
+                font-size: 16px;
+                color: var(--primary-color);
+                border-bottom: none;
+                padding-top: 12px;
+            }
+
+        /* ===== دکمه پرداخت ===== */
+        .pay-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: var(--success-color);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s, transform 0.1s;
+            position: relative;
+        }
+
+            .pay-btn:hover {
+                background: #218838;
+            }
+
+            .pay-btn:active {
+                transform: scale(0.98);
+            }
+
+            .pay-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+            .pay-btn.loading::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 20px;
+                height: 20px;
+                border: 3px solid rgba(255,255,255,0.3);
+                border-top-color: #fff;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+            .pay-btn.loading {
+                color: transparent;
+            }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* ===== وضعیت پرداخت ===== */
+        .payment-status {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+            .payment-status.success {
+                display: block;
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+
+            .payment-status.error {
+                display: block;
+                background: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+
+            .payment-status.cancelled {
+                display: block;
+                background: #fff3cd;
+                color: #856404;
+                border: 1px solid #ffeeba;
+            }
+
+        /* ===== ریسپانسیو ===== */
+        @media (min-width: 480px) {
+            body {
+                max-width: 480px;
+                margin: 0 auto;
+            }
+        }
+
+        /* ===== پیام خطا/هشدار عمومی ===== */
+        .notice-box {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+            .notice-box.warning {
+                display: block;
+                background: #fff3cd;
+                color: #856404;
+                border: 1px solid #ffeeba;
+            }
+
+            .notice-box.info {
+                display: block;
+                background: #d1ecf1;
+                color: #0c5460;
+                border: 1px solid #bee5eb;
+            }
+
+        /* ===== Toggle Password ===== */
+        .input-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-secondary);
+            padding: 4px;
+        }
+
+            .toggle-password:hover {
+                color: var(--primary-color);
+            }
+
+        .input-wrapper input {
+            padding-left: 40px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== صفحه تنظیمات (ورود توکن‌ها) ========== -->
+    <div class="setup-page" id="setupPage">
+        <div class="setup-header">
+            <h1>⚙️ تنظیمات اولیه</h1>
+            <p>برای شروع، توکن‌های مورد نیاز را وارد کنید</p>
+        </div>
+
+        <div class="setup-card">
+            <div class="setup-error" id="setupError"></div>
+
+            <div class="token-info">
+                💡 توکن ربات را از <code>@botfather</code> دریافت کنید.<br>
+                توکن پرداخت را نیز از همان‌جا برای بازوی خود ایجاد کنید.
+            </div>
+
+            <div class="form-group">
+                <label for="botTokenInput">توکن ربات (Bot Token)</label>
+                <div class="input-wrapper">
+                    <input type="password" id="botTokenInput"
+                           placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
+                           autocomplete="off" spellcheck="false">
+                    <button type="button" class="toggle-password" onclick="Setup.togglePassword('botTokenInput', this)">👁</button>
+                </div>
+                <p class="hint">فرمت: عدد:حروف (از @botfather)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="providerTokenInput">توکن پرداخت (Provider Token)</label>
+                <div class="input-wrapper">
+                    <input type="password" id="providerTokenInput"
+                           placeholder="WALLET-XXXX-XXXXXXXXXXXX"
+                           autocomplete="off" spellcheck="false">
+                    <button type="button" class="toggle-password" onclick="Setup.togglePassword('providerTokenInput', this)">👁</button>
+                </div>
+                <p class="hint">توکن کیف‌پول از @botfather</p>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="useTestToken" onchange="Setup.toggleTestToken()">
+                    <label for="useTestToken">استفاده از توکن آزمایشی (بدون انتقال واقعی پول)</label>
+                </div>
+            </div>
+
+            <button class="setup-btn" id="setupBtn" onclick="Setup.save()">
+                ✓ ذخیره و ادامه
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ========== صفحه اصلی فروشگاه ========== -->
+    <div class="shop-page" id="shopPage">
+        <!-- هدر فروشگاه -->
+        <div class="header">
+            <button class="settings-btn" onclick="Setup.show()" title="تنظیمات">⚙️</button>
+            <h1>🛒 فروشگاه تست</h1>
+            <p class="subtitle">مینی‌اپ نمونه بله</p>
+        </div>
+
+        <!-- هشدار عدم پشتیبانی -->
+        <div id="unsupportedNotice" class="notice-box"></div>
+
+        <!-- اطلاعات کاربر -->
+        <div class="user-info-card">
+            <h2>👤 اطلاعات کاربر</h2>
+            <div class="user-info-grid">
+                <div class="user-info-item">
+                    <span class="label">شناسه کاربر</span>
+                    <span class="value" id="userId">در حال بارگذاری...</span>
+                </div>
+                <div class="user-info-item">
+                    <span class="label">نام</span>
+                    <span class="value" id="userFirstName">در حال بارگذاری...</span>
+                </div>
+                <div class="user-info-item">
+                    <span class="label">نام خانوادگی</span>
+                    <span class="value" id="userLastName">در حال بارگذاری...</span>
+                </div>
+                <div class="user-info-item">
+                    <span class="label">نام کاربری</span>
+                    <span class="value" id="userUsername">در حال بارگذاری...</span>
+                </div>
+                <div class="user-info-item">
+                    <span class="label">شماره موبایل</span>
+                    <span class="value" id="userPhone">دریافت نشده</span>
+                </div>
+            </div>
+            <button class="phone-request-btn" id="requestPhoneBtn" onclick="BaleAPI.requestPhoneNumber()">
+                📱 درخواست شماره موبایل
+            </button>
+        </div>
+
+        <!-- محصولات -->
+        <div class="product-card" data-product-id="1">
+            <div class="product-info">
+                <div class="product-name">محصول شماره ۱</div>
+                <div class="product-price">۱۰۰,۰۰۰ تومان</div>
+            </div>
+            <div class="product-qty">
+                <button class="qty-btn" onclick="UI.changeQty(0, -1)" aria-label="کاهش تعداد">−</button>
+                <input class="qty-input" type="number" id="qty0" value="0" min="0" max="99"
+                       onchange="UI.onQtyInputChange(0)" aria-label="تعداد محصول شماره ۱">
+                <button class="qty-btn" onclick="UI.changeQty(0, 1)" aria-label="افزایش تعداد">+</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-product-id="2">
+            <div class="product-info">
+                <div class="product-name">محصول شماره ۲</div>
+                <div class="product-price">۲۵۰,۰۰۰ تومان</div>
+            </div>
+            <div class="product-qty">
+                <button class="qty-btn" onclick="UI.changeQty(1, -1)" aria-label="کاهش تعداد">−</button>
+                <input class="qty-input" type="number" id="qty1" value="0" min="0" max="99"
+                       onchange="UI.onQtyInputChange(1)" aria-label="تعداد محصول شماره ۲">
+                <button class="qty-btn" onclick="UI.changeQty(1, 1)" aria-label="افزایش تعداد">+</button>
+            </div>
+        </div>
+
+        <!-- خلاصه سفارش -->
+        <div class="order-summary">
+            <h2>📋 خلاصه سفارش</h2>
+            <div class="summary-row">
+                <span>جمع تعداد کالاها:</span>
+                <span id="totalQty">۰ عدد</span>
+            </div>
+            <div class="summary-row total">
+                <span>مبلغ کل:</span>
+                <span id="totalPrice">۰ تومان</span>
+            </div>
+        </div>
+
+        <!-- دکمه پرداخت -->
+        <button class="pay-btn" id="payBtn" onclick="Payment.initiate()" disabled>
+            💳 پرداخت
+        </button>
+
+        <!-- وضعیت پرداخت -->
+        <div class="payment-status" id="paymentStatus"></div>
+    </div>
+
+
+    <script>
+        'use strict';
+
+        // ============================================================
+        // بخش ۱: Constants - ثابت‌ها
+        // ============================================================
+        var Constants = {
+            // آدرس پایه API بله
+            API_BASE_URL: 'https://tapi.bale.ai/bot',
+
+            // توکن پرداخت آزمایشی کیف‌پول - از مستندات رسمی بله
+            TEST_PROVIDER_TOKEN: 'WALLET-TEST-1111111111111111',
+
+            // کلیدهای ذخیره‌سازی در LocalStorage
+            STORAGE_KEY: 'bale_miniapp_store',
+            TOKENS_KEY: 'bale_miniapp_tokens',
+
+            // لیست محصولات
+            PRODUCTS: [
+                { id: 1, name: 'محصول شماره ۱', price: 100000 },
+                { id: 2, name: 'محصول شماره ۲', price: 250000 }
+            ],
+
+            // حداکثر تعداد قابل سفارش
+            MAX_QTY: 99
+        };
+
+
+        // ============================================================
+        // بخش ۲: State - وضعیت برنامه
+        // ============================================================
+        var State = {
+            // توکن‌ها (از LocalStorage خوانده می‌شوند)
+            botToken: null,
+            providerToken: null,
+
+            // تعداد هر محصول
+            quantities: [0, 0],
+
+            // اطلاعات کاربر
+            user: {
+                id: null,
+                firstName: null,
+                lastName: null,
+                username: null,
+                phone: null
+            },
+
+            // وضعیت پرداخت: null | 'paid' | 'cancelled' | 'failed' | 'pending'
+            paymentStatus: null,
+
+            // آیا در حال پردازش پرداخت هستیم
+            isProcessingPayment: false
+        };
+
+
+        // ============================================================
+        // بخش ۳: Helpers - توابع کمکی
+        // ============================================================
+        var Helpers = {
+            /**
+             * تبدیل عدد به فرمت فارسی با جداکننده هزارگان
+             * @param {number} num
+             * @returns {string}
+             */
+            formatPrice: function (num) {
+                var persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                var formatted = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return formatted.replace(/\d/g, function (d) {
+                    return persianDigits[parseInt(d)];
+                });
+            },
+
+            /**
+             * تبدیل عدد به ارقام فارسی
+             * @param {number|string} num
+             * @returns {string}
+             */
+            toPersianDigits: function (num) {
+                var persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                return num.toString().replace(/\d/g, function (d) {
+                    return persianDigits[parseInt(d)];
+                });
+            },
+
+            /**
+             * محاسبه جمع تعداد کل کالاها
+             * @returns {number}
+             */
+            getTotalQty: function () {
+                return State.quantities.reduce(function (sum, q) { return sum + q; }, 0);
+            },
+
+            /**
+             * محاسبه مبلغ کل
+             * @returns {number}
+             */
+            getTotalPrice: function () {
+                var total = 0;
+                for (var i = 0; i < Constants.PRODUCTS.length; i++) {
+                    total += State.quantities[i] * Constants.PRODUCTS[i].price;
+                }
+                return total;
+            },
+
+            /**
+             * محدود کردن مقدار بین حداقل و حداکثر
+             * @param {number} value
+             * @param {number} min
+             * @param {number} max
+             * @returns {number}
+             */
+            clamp: function (value, min, max) {
+                return Math.max(min, Math.min(max, value));
+            },
+
+            /**
+             * اعتبارسنجی ساده توکن ربات
+             * @param {string} token
+             * @returns {boolean}
+             */
+            isValidBotToken: function (token) {
+                if (!token || typeof token !== 'string') return false;
+                // فرمت: عدد:حروف_عدد
+                return /^\d+:[A-Za-z0-9_-]+$/.test(token.trim());
+            },
+
+            /**
+             * اعتبارسنجی ساده توکن پرداخت
+             * @param {string} token
+             * @returns {boolean}
+             */
+            isValidProviderToken: function (token) {
+                if (!token || typeof token !== 'string') return false;
+                // فرمت: WALLET-XXX... یا هر رشته غیرخالی
+                return token.trim().length > 5;
+            }
+        };
+
+
+        // ============================================================
+        // بخش ۴: Setup - مدیریت صفحه تنظیمات و توکن‌ها
+        // ============================================================
+        var Setup = {
+            /**
+             * بارگذاری توکن‌ها از LocalStorage
+             * @returns {boolean} آیا توکن‌ها موجود و معتبر هستند
+             */
+            loadTokens: function () {
+                try {
+                    var raw = localStorage.getItem(Constants.TOKENS_KEY);
+                    if (!raw) return false;
+
+                    var data = JSON.parse(raw);
+                    if (data.botToken && data.providerToken) {
+                        State.botToken = data.botToken;
+                        State.providerToken = data.providerToken;
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('خطا در بارگذاری توکن‌ها:', e);
+                }
+                return false;
+            },
+
+            /**
+             * ذخیره توکن‌ها در LocalStorage
+             */
+            saveTokens: function () {
+                try {
+                    var data = {
+                        botToken: State.botToken,
+                        providerToken: State.providerToken
+                    };
+                    localStorage.setItem(Constants.TOKENS_KEY, JSON.stringify(data));
+                } catch (e) {
+                    console.error('خطا در ذخیره توکن‌ها:', e);
+                }
+            },
+
+            /**
+             * نمایش/مخفی کردن رمز در فیلد ورودی
+             * @param {string} inputId
+             * @param {HTMLElement} btn
+             */
+            togglePassword: function (inputId, btn) {
+                var input = document.getElementById(inputId);
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    btn.textContent = '🙈';
+                } else {
+                    input.type = 'password';
+                    btn.textContent = '👁';
+                }
+            },
+
+            /**
+             * استفاده از توکن آزمایشی
+             */
+            toggleTestToken: function () {
+                var checkbox = document.getElementById('useTestToken');
+                var input = document.getElementById('providerTokenInput');
+
+                if (checkbox.checked) {
+                    input.value = Constants.TEST_PROVIDER_TOKEN;
+                    input.disabled = true;
+                } else {
+                    input.value = '';
+                    input.disabled = false;
+                }
+            },
+
+            /**
+             * نمایش خطا در صفحه تنظیمات
+             * @param {string} message
+             */
+            showError: function (message) {
+                var el = document.getElementById('setupError');
+                el.textContent = message;
+                el.classList.add('show');
+            },
+
+            /**
+             * مخفی کردن خطا
+             */
+            hideError: function () {
+                document.getElementById('setupError').classList.remove('show');
+            },
+
+            /**
+             * ذخیره تنظیمات و رفتن به صفحه فروشگاه
+             */
+            save: function () {
+                Setup.hideError();
+
+                var botToken = document.getElementById('botTokenInput').value.trim();
+                var providerToken = document.getElementById('providerTokenInput').value.trim();
+
+                // اعتبارسنجی توکن ربات
+                if (!Helpers.isValidBotToken(botToken)) {
+                    Setup.showError('❌ توکن ربات نامعتبر است. فرمت صحیح: 123456789:ABCdef...');
+                    return;
+                }
+
+                // اعتبارسنجی توکن پرداخت
+                if (!Helpers.isValidProviderToken(providerToken)) {
+                    Setup.showError('❌ توکن پرداخت نامعتبر است.');
+                    return;
+                }
+
+                // ذخیره در State و LocalStorage
+                State.botToken = botToken;
+                State.providerToken = providerToken;
+                Setup.saveTokens();
+
+                // رفتن به صفحه فروشگاه
+                Setup.hide();
+                App.initShop();
+            },
+
+            /**
+             * نمایش صفحه تنظیمات
+             */
+            show: function () {
+                document.getElementById('setupPage').classList.remove('hidden');
+                document.getElementById('shopPage').classList.remove('active');
+
+                // پر کردن فیلدها با مقادیر فعلی
+                if (State.botToken) {
+                    document.getElementById('botTokenInput').value = State.botToken;
+                }
+                if (State.providerToken) {
+                    document.getElementById('providerTokenInput').value = State.providerToken;
+                    // بررسی آیا توکن آزمایشی است
+                    if (State.providerToken === Constants.TEST_PROVIDER_TOKEN) {
+                        document.getElementById('useTestToken').checked = true;
+                        document.getElementById('providerTokenInput').disabled = true;
+                    }
+                }
+            },
+
+            /**
+             * مخفی کردن صفحه تنظیمات و نمایش فروشگاه
+             */
+            hide: function () {
+                document.getElementById('setupPage').classList.add('hidden');
+                document.getElementById('shopPage').classList.add('active');
+            }
+        };
+
+
+        // ============================================================
+        // بخش ۵: LocalStorage - مدیریت ذخیره و بازیابی داده‌های فروشگاه
+        // ============================================================
+        var Storage = {
+            /**
+             * ذخیره تمام اطلاعات در LocalStorage
+             */
+            save: function () {
+                try {
+                    var data = {
+                        quantities: State.quantities,
+                        user: State.user,
+                        paymentStatus: State.paymentStatus,
+                        totalPrice: Helpers.getTotalPrice(),
+                        lastUpdated: new Date().toISOString()
+                    };
+                    localStorage.setItem(Constants.STORAGE_KEY, JSON.stringify(data));
+                } catch (e) {
+                    console.error('خطا در ذخیره‌سازی:', e);
+                }
+            },
+
+            /**
+             * بازیابی اطلاعات از LocalStorage
+             * @returns {object|null}
+             */
+            load: function () {
+                try {
+                    var raw = localStorage.getItem(Constants.STORAGE_KEY);
+                    if (!raw) return null;
+                    return JSON.parse(raw);
+                } catch (e) {
+                    console.error('خطا در بازیابی اطلاعات:', e);
+                    return null;
+                }
+            },
+
+            /**
+             * بازیابی و اعمال اطلاعات ذخیره شده به State
+             */
+            restore: function () {
+                var data = Storage.load();
+                if (!data) return;
+
+                // بازیابی تعداد محصولات
+                if (Array.isArray(data.quantities) && data.quantities.length === Constants.PRODUCTS.length) {
+                    for (var i = 0; i < data.quantities.length; i++) {
+                        State.quantities[i] = Helpers.clamp(
+                            parseInt(data.quantities[i]) || 0,
+                            0,
+                            Constants.MAX_QTY
+                        );
+                    }
+                }
+
+                // بازیابی اطلاعات کاربر
+                if (data.user) {
+                    if (data.user.phone) {
+                        State.user.phone = data.user.phone;
+                    }
+                }
+
+                // بازیابی وضعیت پرداخت
+                if (data.paymentStatus) {
+                    State.paymentStatus = data.paymentStatus;
+                }
+            }
+        };
+
+
+        // ============================================================
+        // بخش ۶: UI - مدیریت رابط کاربری
+        // ============================================================
+        var UI = {
+            /**
+             * تغییر تعداد محصول با دکمه‌های + و -
+             * @param {number} index - ایندکس محصول
+             * @param {number} delta - مقدار تغییر (1 یا -1)
+             */
+            changeQty: function (index, delta) {
+                var newVal = Helpers.clamp(
+                    State.quantities[index] + delta,
+                    0,
+                    Constants.MAX_QTY
+                );
+                State.quantities[index] = newVal;
+                document.getElementById('qty' + index).value = newVal;
+                UI.updateSummary();
+                Storage.save();
+            },
+
+            /**
+             * هندل تغییر مستقیم ورودی تعداد
+             * @param {number} index - ایندکس محصول
+             */
+            onQtyInputChange: function (index) {
+                var input = document.getElementById('qty' + index);
+                var val = parseInt(input.value);
+                if (isNaN(val) || val < 0) val = 0;
+                val = Helpers.clamp(val, 0, Constants.MAX_QTY);
+                State.quantities[index] = val;
+                input.value = val;
+                UI.updateSummary();
+                Storage.save();
+            },
+
+            /**
+             * بروزرسانی خلاصه سفارش (تعداد کل و مبلغ کل)
+             */
+            updateSummary: function () {
+                var totalQty = Helpers.getTotalQty();
+                var totalPrice = Helpers.getTotalPrice();
+
+                document.getElementById('totalQty').textContent =
+                    Helpers.toPersianDigits(totalQty) + ' عدد';
+                document.getElementById('totalPrice').textContent =
+                    Helpers.formatPrice(totalPrice) + ' تومان';
+
+                // فعال/غیرفعال کردن دکمه پرداخت
+                var payBtn = document.getElementById('payBtn');
+                payBtn.disabled = totalQty === 0 || State.isProcessingPayment;
+            },
+
+            /**
+             * نمایش اطلاعات کاربر در رابط کاربری
+             */
+            renderUserInfo: function () {
+                var u = State.user;
+
+                document.getElementById('userId').textContent =
+                    u.id ? String(u.id) : '—';
+                document.getElementById('userId').classList.toggle('placeholder', !u.id);
+
+                document.getElementById('userFirstName').textContent =
+                    u.firstName || '—';
+                document.getElementById('userFirstName').classList.toggle('placeholder', !u.firstName);
+
+                document.getElementById('userLastName').textContent =
+                    u.lastName || '—';
+                document.getElementById('userLastName').classList.toggle('placeholder', !u.lastName);
+
+                document.getElementById('userUsername').textContent =
+                    u.username ? ('@' + u.username) : '—';
+                document.getElementById('userUsername').classList.toggle('placeholder', !u.username);
+
+                document.getElementById('userPhone').textContent =
+                    u.phone || 'دریافت نشده';
+                document.getElementById('userPhone').classList.toggle('placeholder', !u.phone);
+
+                // اگر شماره موبایل از قبل داریم، دکمه را مخفی کنیم
+                if (u.phone) {
+                    document.getElementById('requestPhoneBtn').style.display = 'none';
+                }
+            },
+
+            /**
+             * بروزرسانی اینپوت‌های تعداد از State
+             */
+            syncInputsFromState: function () {
+                for (var i = 0; i < State.quantities.length; i++) {
+                    document.getElementById('qty' + i).value = State.quantities[i];
+                }
+            },
+
+            /**
+             * نمایش وضعیت پرداخت
+             * @param {string} status - وضعیت: 'paid' | 'cancelled' | 'failed' | 'pending'
+             * @param {string} [message] - پیام سفارشی
+             */
+            showPaymentStatus: function (status, message) {
+                var el = document.getElementById('paymentStatus');
+                el.className = 'payment-status';
+
+                switch (status) {
+                    case 'paid':
+                        el.classList.add('success');
+                        el.textContent = message || '✅ پرداخت با موفقیت انجام شد!';
+                        break;
+                    case 'cancelled':
+                        el.classList.add('cancelled');
+                        el.textContent = message || '⚠️ پرداخت لغو شد.';
+                        break;
+                    case 'failed':
+                        el.classList.add('error');
+                        el.textContent = message || '❌ خطا در پرداخت. لطفاً دوباره تلاش کنید.';
+                        break;
+                    case 'pending':
+                        el.classList.add('cancelled');
+                        el.textContent = message || '⏳ در حال پردازش پرداخت...';
+                        break;
+                    default:
+                        el.style.display = 'none';
+                        return;
+                }
+            },
+
+            /**
+             * فعال/غیرفعال کردن حالت بارگذاری دکمه پرداخت
+             * @param {boolean} loading
+             */
+            setPayBtnLoading: function (loading) {
+                var btn = document.getElementById('payBtn');
+                if (loading) {
+                    btn.classList.add('loading');
+                    btn.disabled = true;
+                } else {
+                    btn.classList.remove('loading');
+                    btn.disabled = Helpers.getTotalQty() === 0;
+                }
+            }
+        };
+
+
+        // ============================================================
+        // بخش ۷: Bale API - تعامل با SDK مینی‌اپ بله
+        // ============================================================
+        var BaleAPI = {
+            /** ارجاع به شیء WebApp بله */
+            webapp: null,
+
+            /**
+             * مقداردهی اولیه و دریافت شیء WebApp
+             * @returns {boolean} آیا SDK در دسترس است
+             */
+            init: function () {
+                try {
+                    if (typeof Bale !== 'undefined' && Bale.WebApp) {
+                        BaleAPI.webapp = Bale.WebApp;
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('خطا در دسترسی به Bale SDK:', e);
+                }
+                return false;
+            },
+
+            /**
+             * اطلاع‌رسانی به بله که مینی‌اپ آماده نمایش است
+             */
+            ready: function () {
+                if (BaleAPI.webapp && typeof BaleAPI.webapp.ready === 'function') {
+                    BaleAPI.webapp.ready();
+                }
+            },
+
+            /**
+             * دریافت اطلاعات کاربر از initDataUnsafe
+             * طبق مستندات: initDataUnsafe شامل WebAppInitData است
+             * که فیلد user از نوع WebAppUser دارد
+             */
+            getUserInfo: function () {
+                if (!BaleAPI.webapp) return;
+
+                try {
+                    var initData = BaleAPI.webapp.initDataUnsafe;
+                    if (initData && initData.user) {
+                        var user = initData.user;
+                        State.user.id = user.id || null;
+                        State.user.firstName = user.first_name || null;
+                        State.user.lastName = user.last_name || null;
+                        State.user.username = user.username || null;
+                    }
+                } catch (e) {
+                    console.error('خطا در دریافت اطلاعات کاربر:', e);
+                }
+            },
+
+            /**
+             * درخواست شماره موبایل از کاربر
+             * طبق مستندات: requestContact(callback)
+             * یک پاپ‌آپ بومی نمایش می‌دهد و callback یک boolean دریافت می‌کند
+             */
+            requestPhoneNumber: function () {
+                if (!BaleAPI.webapp) {
+                    UI.showPaymentStatus('failed', '❌ SDK بله در دسترس نیست.');
+                    return;
+                }
+
+                if (typeof BaleAPI.webapp.requestContact !== 'function') {
+                    UI.showPaymentStatus('failed', '❌ این نسخه از بله از درخواست شماره موبایل پشتیبانی نمی‌کند.');
+                    return;
+                }
+
+                var btn = document.getElementById('requestPhoneBtn');
+                btn.disabled = true;
+                btn.textContent = '⏳ در انتظار پاسخ...';
+
+                try {
+                    BaleAPI.webapp.requestContact(function (shared) {
+                        if (shared) {
+                            // کاربر شماره موبایل را به اشتراک گذاشت
+                            // طبق مستندات، شماره موبایل از طریق initData به بازو ارسال می‌شود
+                            // و در سمت MiniApp مستقیماً در دسترس نیست
+                            State.user.phone = 'اشتراک‌گذاری شد ✓';
+                            UI.renderUserInfo();
+                            Storage.save();
+                        } else {
+                            // کاربر مجوز نداد
+                            btn.disabled = false;
+                            btn.textContent = '📱 درخواست شماره موبایل';
+                            UI.showPaymentStatus('cancelled', '⚠️ شما مجوز اشتراک‌گذاری شماره موبایل را ندادید.');
+                            // مخفی کردن پیام بعد از ۳ ثانیه
+                            setTimeout(function () {
+                                document.getElementById('paymentStatus').className = 'payment-status';
+                            }, 3000);
+                        }
+                    });
+                } catch (e) {
+                    console.error('خطا در درخواست شماره موبایل:', e);
+                    btn.disabled = false;
+                    btn.textContent = '📱 درخواست شماره موبایل';
+                }
+            },
+
+            /**
+             * نمایش پاپ‌آپ بومی بله
+             * طبق مستندات: showPopup(params, callback)
+             * @param {object} params - پارامترهای پاپ‌آپ
+             * @param {function} [callback] - تابع بازگشتی
+             */
+            showPopup: function (params, callback) {
+                if (!BaleAPI.webapp || typeof BaleAPI.webapp.showPopup !== 'function') {
+                    // اگر showPopup در دسترس نباشد، از alert استفاده شود
+                    alert(params.message || params.title || '');
+                    if (callback) callback(null);
+                    return;
+                }
+
+                try {
+                    BaleAPI.webapp.showPopup(params, callback);
+                } catch (e) {
+                    console.error('خطا در نمایش پاپ‌آپ:', e);
+                    alert(params.message || '');
+                    if (callback) callback(null);
+                }
+            },
+
+            /**
+             * نمایش هشدار بومی بله
+             * طبق مستندات: showAlert(message, callback)
+             * @param {string} message
+             * @param {function} [callback]
+             */
+            showAlert: function (message, callback) {
+                if (!BaleAPI.webapp || typeof BaleAPI.webapp.showAlert !== 'function') {
+                    alert(message);
+                    if (callback) callback();
+                    return;
+                }
+
+                try {
+                    BaleAPI.webapp.showAlert(message, callback);
+                } catch (e) {
+                    alert(message);
+                    if (callback) callback();
+                }
+            },
+
+            /**
+             * نمایش دیالوگ تأیید بومی بله
+             * طبق مستندات: showConfirm(message, callback)
+             * @param {string} message
+             * @param {function} callback - boolean دریافت می‌کند
+             */
+            showConfirm: function (message, callback) {
+                if (!BaleAPI.webapp || typeof BaleAPI.webapp.showConfirm !== 'function') {
+                    var result = confirm(message);
+                    if (callback) callback(result);
+                    return;
+                }
+
+                try {
+                    BaleAPI.webapp.showConfirm(message, callback);
+                } catch (e) {
+                    var result2 = confirm(message);
+                    if (callback) callback(result2);
+                }
+            },
+
+            /**
+             * بررسی پشتیبانی مینی‌اپ
+             * طبق مستندات: فیلد isMiniAppSupported
+             * @returns {boolean}
+             */
+            isMiniAppSupported: function () {
+                if (!BaleAPI.webapp) return false;
+                return BaleAPI.webapp.isMiniAppSupported !== false;
+            },
+
+            /**
+             * اعمال تم بله به رابط کاربری
+             * طبق مستندات: themeParams و colorScheme
+             */
+            applyTheme: function () {
+                if (!BaleAPI.webapp) return;
+
+                try {
+                    var colorScheme = BaleAPI.webapp.colorScheme;
+                    if (colorScheme === 'dark') {
+                        document.documentElement.style.setProperty('--bg-color', '#1a1a2e');
+                        document.documentElement.style.setProperty('--card-bg', '#16213e');
+                        document.documentElement.style.setProperty('--text-color', '#e0e0e0');
+                        document.documentElement.style.setProperty('--text-secondary', '#a0a0a0');
+                        document.documentElement.style.setProperty('--border-color', '#2a2a4a');
+                    }
+
+                    // استفاده از رنگ‌های تم بله در صورت وجود
+                    var tp = BaleAPI.webapp.themeParams;
+                    if (tp) {
+                        if (tp.bg_color) {
+                            document.documentElement.style.setProperty('--bg-color', tp.bg_color);
+                        }
+                        if (tp.text_color) {
+                            document.documentElement.style.setProperty('--text-color', tp.text_color);
+                        }
+                        if (tp.button_color) {
+                            document.documentElement.style.setProperty('--primary-color', tp.button_color);
+                        }
+                        if (tp.hint_color) {
+                            document.documentElement.style.setProperty('--text-secondary', tp.hint_color);
+                        }
+                    }
+
+                    // ثبت رویداد تغییر تم
+                    // طبق مستندات: Bale.WebApp.onEvent('themeChanged', handler)
+                    if (typeof BaleAPI.webapp.onEvent === 'function') {
+                        BaleAPI.webapp.onEvent('themeChanged', function () {
+                            BaleAPI.applyTheme();
+                        });
+                    }
+                } catch (e) {
+                    console.error('خطا در اعمال تم:', e);
+                }
+            }
+        };
+
+
+        // ============================================================
+        // بخش ۸: Payment - مدیریت پرداخت
+        // ============================================================
+        var Payment = {
+            /**
+             * شروع فرایند پرداخت
+             * ابتدا لینک فاکتور از API بله ساخته می‌شود
+             * سپس با openInvoice باز می‌شود
+             */
+            initiate: async function () {
+                // بررسی وجود توکن‌ها
+                if (!State.botToken || !State.providerToken) {
+                    BaleAPI.showAlert('لطفاً ابتدا توکن‌ها را در تنظیمات وارد کنید.');
+                    Setup.show();
+                    return;
+                }
+
+                // بررسی وجود محصول در سبد خرید
+                var totalQty = Helpers.getTotalQty();
+                if (totalQty === 0) {
+                    BaleAPI.showAlert('لطفاً حداقل یک محصول انتخاب کنید.');
+                    return;
+                }
+
+                // جلوگیری از درخواست تکراری
+                if (State.isProcessingPayment) return;
+                State.isProcessingPayment = true;
+
+                UI.setPayBtnLoading(true);
+                UI.showPaymentStatus('pending');
+
+                try {
+                    // ساخت لینک فاکتور از طریق API بله
+                    var invoiceLink = await Payment.createInvoiceLink();
+
+                    if (!invoiceLink) {
+                        throw new Error('لینک فاکتور دریافت نشد.');
+                    }
+
+                    // باز کردن صفحه پرداخت با openInvoice
+                    // طبق مستندات بله: openInvoice(invoiceParams, callback)
+                    // invoiceParams: دقیقاً مقدار دریافتی از createInvoiceLink
+                    // callback: تابعی با آبجکت شامل فیلد status
+                    Payment.openInvoice(invoiceLink);
+
+                } catch (error) {
+                    console.error('خطا در شروع پرداخت:', error);
+                    State.paymentStatus = 'failed';
+                    UI.showPaymentStatus('failed', '❌ خطا در ایجاد فاکتور: ' + error.message);
+                    State.isProcessingPayment = false;
+                    UI.setPayBtnLoading(false);
+                    Storage.save();
+                }
+            },
+
+            /**
+             * ساخت لینک فاکتور از API بله
+             * طبق مستندات: createInvoiceLink
+             * آدرس: https://tapi.bale.ai/bot<token>/createInvoiceLink
+             * پارامترها: title, description, payload, provider_token, prices
+             * @returns {Promise<string|null>}
+             */
+            createInvoiceLink: async function () {
+                // ساخت لیست قیمت‌ها (LabeledPrice)
+                var prices = [];
+                var descParts = [];
+
+                for (var i = 0; i < Constants.PRODUCTS.length; i++) {
+                    var qty = State.quantities[i];
+                    if (qty > 0) {
+                        var product = Constants.PRODUCTS[i];
+                        // طبق مستندات: LabeledPrice شامل label و amount است
+                        // قیمت به ریال (تومان × ۱۰)
+                        prices.push({
+                            label: product.name + ' (x' + qty + ')',
+                            amount: product.price * qty * 10
+                        });
+                        descParts.push(product.name + ' × ' + qty);
+                    }
+                }
+
+                if (prices.length === 0) {
+                    throw new Error('سبد خرید خالی است.');
+                }
+
+                // ساخت payload برای شناسایی تراکنش
+                var payload = JSON.stringify({
+                    userId: State.user.id,
+                    items: State.quantities,
+                    totalPrice: Helpers.getTotalPrice(),
+                    timestamp: Date.now()
+                });
+
+                var requestBody = {
+                    title: 'فروشگاه تست',
+                    description: descParts.join(' + '),
+                    payload: payload,
+                    provider_token: State.providerToken,
+                    prices: prices
+                };
+
+                var url = Constants.API_BASE_URL + State.botToken + '/createInvoiceLink';
+
+                var response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    var errorText = await response.text();
+                    throw new Error('خطای سرور: ' + response.status + ' - ' + errorText);
+                }
+
+                var data = await response.json();
+
+                // طبق مستندات: اگر ok برابر true باشد، نتیجه در فیلد result است
+                if (data.ok && data.result) {
+                    return data.result;
+                } else {
+                    throw new Error(data.description || 'خطا در ایجاد فاکتور');
+                }
+            },
+
+            /**
+             * باز کردن صفحه پرداخت بله
+             * طبق مستندات: openInvoice(invoiceParams, callback)
+             * invoiceParams: مقدار دریافتی از createInvoiceLink
+             * callback: آبجکت با فیلد status
+             * مقادیر ممکن status: 'paid', 'cancelled', 'failed', 'pending'
+             * @param {string} invoiceLink
+             */
+            openInvoice: function (invoiceLink) {
+                if (!BaleAPI.webapp || typeof BaleAPI.webapp.openInvoice !== 'function') {
+                    // اگر openInvoice در دسترس نباشد
+                    State.isProcessingPayment = false;
+                    UI.setPayBtnLoading(false);
+                    UI.showPaymentStatus('failed',
+                        '❌ سیستم پرداخت در این نسخه از بله در دسترس نیست. لطفاً اپلیکیشن بله را بروزرسانی کنید.');
+                    Storage.save();
+                    return;
+                }
+
+                try {
+                    BaleAPI.webapp.openInvoice(invoiceLink, function (result) {
+                        State.isProcessingPayment = false;
+                        UI.setPayBtnLoading(false);
+
+                        // طبق مستندات: result آبجکتی با فیلد status است
+                        var status = null;
+                        if (result && typeof result === 'object' && result.status) {
+                            status = result.status;
+                        } else if (typeof result === 'string') {
+                            // برای سازگاری، ممکن است مستقیماً رشته باشد
+                            status = result;
+                        }
+
+                        Payment.handleResult(status);
+                    });
+                } catch (e) {
+                    console.error('خطا در باز کردن فاکتور:', e);
+                    State.isProcessingPayment = false;
+                    UI.setPayBtnLoading(false);
+                    UI.showPaymentStatus('failed', '❌ خطا در باز کردن صفحه پرداخت.');
+                    Storage.save();
+                }
+            },
+
+            /**
+             * پردازش نتیجه پرداخت
+             * @param {string} status - وضعیت پرداخت
+             */
+            handleResult: function (status) {
+                switch (status) {
+                    case 'paid':
+                        State.paymentStatus = 'paid';
+                        UI.showPaymentStatus('paid', '✅ پرداخت با موفقیت انجام شد! از خرید شما متشکریم.');
+                        BaleAPI.showAlert('پرداخت با موفقیت انجام شد! ✅');
+                        break;
+
+                    case 'cancelled':
+                        State.paymentStatus = 'cancelled';
+                        UI.showPaymentStatus('cancelled', '⚠️ پرداخت توسط شما لغو شد.');
+                        break;
+
+                    case 'failed':
+                        State.paymentStatus = 'failed';
+                        UI.showPaymentStatus('failed', '❌ پرداخت با خطا مواجه شد. لطفاً دوباره تلاش کنید.');
+                        break;
+
+                    case 'pending':
+                        State.paymentStatus = 'pending';
+                        UI.showPaymentStatus('pending', '⏳ پرداخت در حال بررسی است...');
+                        break;
+
+                    default:
+                        // وضعیت نامشخص
+                        State.paymentStatus = 'failed';
+                        UI.showPaymentStatus('failed', '❌ وضعیت پرداخت نامشخص است.');
+                        break;
+                }
+
+                Storage.save();
+            }
+        };
+
+
+        // ============================================================
+        // بخش ۹: Events - ثبت رویدادها
+        // ============================================================
+        var Events = {
+            /**
+             * ثبت تمام رویدادهای مورد نیاز
+             */
+            register: function () {
+                // رویداد invoiceClosed از بله
+                // طبق مستندات: Bale.WebApp.onEvent('invoiceClosed', handler)
+                if (BaleAPI.webapp && typeof BaleAPI.webapp.onEvent === 'function') {
+                    BaleAPI.webapp.onEvent('invoiceClosed', function (result) {
+                        // این رویداد هم ممکن است فراخوانی شود
+                        // اما معمولاً callback در openInvoice کافی است
+                        console.log('رویداد invoiceClosed:', result);
+                    });
+                }
+            }
+        };
+
+
+        // ============================================================
+        // بخش ۱۰: Initialization - مقداردهی اولیه
+        // ============================================================
+        var App = {
+            /**
+             * مقداردهی اولیه برنامه
+             */
+            init: function () {
+                // ۱- مقداردهی اولیه SDK بله
+                var sdkAvailable = BaleAPI.init();
+
+                // ۲- اعمال تم بله
+                if (sdkAvailable) {
+                    BaleAPI.applyTheme();
+                }
+
+                // ۳- بارگذاری توکن‌ها از LocalStorage
+                var tokensExist = Setup.loadTokens();
+
+                // ۴- اگر توکن‌ها وجود ندارند، صفحه تنظیمات نمایش داده شود
+                if (!tokensExist) {
+                    Setup.show();
+                    // اطلاع‌رسانی آماده بودن مینی‌اپ به بله
+                    BaleAPI.ready();
+                    return;
+                }
+
+                // ۵- رفتن به صفحه فروشگاه
+                Setup.hide();
+                App.initShop();
+            },
+
+            /**
+             * مقداردهی صفحه فروشگاه
+             */
+            initShop: function () {
+                var sdkAvailable = BaleAPI.webapp !== null;
+
+                // ۱- بازیابی اطلاعات از LocalStorage
+                Storage.restore();
+
+                // ۲- دریافت اطلاعات کاربر از SDK بله
+                if (sdkAvailable) {
+                    BaleAPI.getUserInfo();
+                }
+
+                // ۳- نمایش اطلاعات کاربر
+                UI.renderUserInfo();
+
+                // ۴- همگام‌سازی ورودی‌های تعداد با State
+                UI.syncInputsFromState();
+
+                // ۵- بروزرسانی خلاصه سفارش
+                UI.updateSummary();
+
+                // ۶- نمایش آخرین وضعیت پرداخت (اگر وجود دارد)
+                if (State.paymentStatus) {
+                    UI.showPaymentStatus(State.paymentStatus);
+                }
+
+                // ۷- ثبت رویدادها
+                Events.register();
+
+                // ۸- بررسی پشتیبانی مینی‌اپ
+                if (sdkAvailable && !BaleAPI.isMiniAppSupported()) {
+                    var notice = document.getElementById('unsupportedNotice');
+                    notice.className = 'notice-box warning';
+                    notice.textContent = '⚠️ نسخه اپلیکیشن بله شما قدیمی است. لطفاً بله را بروزرسانی کنید.';
+                }
+
+                // ۹- اگر SDK در دسترس نیست، پیام اطلاعاتی نمایش بده
+                if (!sdkAvailable) {
+                    var notice2 = document.getElementById('unsupportedNotice');
+                    notice2.className = 'notice-box info';
+                    notice2.textContent = 'ℹ️ این صفحه باید داخل اپلیکیشن بله باز شود. برخی قابلیت‌ها در مرورگر عادی کار نمی‌کنند.';
+                }
+
+                // ۱۰- اطلاع‌رسانی آماده بودن مینی‌اپ به بله
+                // طبق مستندات: این متد را در اسرع وقت فراخوانی کنید
+                BaleAPI.ready();
+
+                // ۱۱- ذخیره اطلاعات اولیه
+                Storage.save();
+            }
+        };
+
+        // اجرای مقداردهی اولیه پس از بارگذاری DOM
+        document.addEventListener('DOMContentLoaded', App.init);
+    </script>
+</body>
+</html>
