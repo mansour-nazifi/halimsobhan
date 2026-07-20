@@ -78,36 +78,36 @@ document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
 });
 
 // ===== Prevent navigation to Snappfood and show alert =====
-(function(){
-  var phone = '۰۹۱۴۹۸۸۹۸۰۵';
-  var message = 'در حال حاضر ثبت سفارش از طریق اسنپ‌فود فعال نیست.\nبرای ثبت سفارش لطفاً با شماره ' + phone + ' تماس بگیرید.\n(اسنپ‌فود در دست اقدام است و به زودی فعال میشود)';
+// (function(){
+//   var phone = '۰۹۱۴۹۸۸۹۸۰۵';
+//   var message = 'در حال حاضر ثبت سفارش از طریق اسنپ‌فود فعال نیست.\nبرای ثبت سفارش لطفاً با شماره ' + phone + ' تماس بگیرید.\n(اسنپ‌فود در دست اقدام است و به زودی فعال میشود)';
 
-  var snappLinks = document.querySelectorAll('a[href*="snappfood"]');
-  snappLinks.forEach(function(link) {
-    // prevent any navigation (including middle-click / open in new tab) by removing href/target
-    try {
-      link.dataset._originalHref = link.href;
-      link.removeAttribute('href');
-      link.removeAttribute('target');
-    } catch (e) {
-      // ignore
-    }
+//   var snappLinks = document.querySelectorAll('a[href*="snappfood"]');
+//   snappLinks.forEach(function(link) {
+//     // prevent any navigation (including middle-click / open in new tab) by removing href/target
+//     try {
+//       link.dataset._originalHref = link.href;
+//       link.removeAttribute('href');
+//       link.removeAttribute('target');
+//     } catch (e) {
+//       // ignore
+//     }
 
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      alert(message);
-    });
+//     link.addEventListener('click', function(e) {
+//       e.preventDefault();
+//       e.stopPropagation();
+//       alert(message);
+//     });
 
-    // also prevent keyboard activation
-    link.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        alert(message);
-      }
-    });
-  });
-})();
+//     // also prevent keyboard activation
+//     link.addEventListener('keydown', function(e) {
+//       if (e.key === 'Enter' || e.key === ' ') {
+//         e.preventDefault();
+//         alert(message);
+//       }
+//     });
+//   });
+// })();
 
 // ===== FAQ Accordion =====
 (function() {
